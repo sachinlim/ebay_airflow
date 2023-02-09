@@ -59,7 +59,6 @@ with DAG(
 
 
     rtx_3000 = gpu_search.expand(x=['RTX 3050 gpu', 'RTX 3060 gpu', 'RTX 3060 ti gpu', 'RTX 3070 gpu', 'RTX 3070 Ti gpu', 'RTX 3080 gpu', 'RTX 3080 Ti gpu', 'RTX 3090 gpu', 'RTX 3090 Ti gpu'])
-    # rtx_2000 = gpu_search.expand(x=['RTX 2060', 'RTX 2060 Super', 'RTX 2070', 'RTX 2070 Super', 'RTX 2080', 'RTX 2080 Super', 'RTX 2080 Ti'])
 
     data = get_nvidia_statement(rtx_3000)
 
