@@ -4,12 +4,13 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 from scripts import ebay_extract_price
-from datetime import datetime
-
+from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'airflow',
     'start_date': datetime(2023, 2, 1),
+    'retries': 5,
+    'retry_delay': timedelta(minutes=2),
     'depends_on_past': False,
 }
 
