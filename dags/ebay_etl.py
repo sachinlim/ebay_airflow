@@ -1,5 +1,7 @@
 from airflow import DAG
 from airflow.decorators import task
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 from scripts import ebay_extract_price
 from datetime import datetime
@@ -13,21 +15,54 @@ default_args = {
 
 with DAG(
     default_args=default_args,
-    dag_id='xcom_dag',
+    dag_id='etl_ebay_gpu_avg',
     schedule_interval='@daily',
     catchup=False,
 ) as dag:
+    check_table = PostgresOperator(
+        task_id="check_table_exists",
+        sql="""
+            CREATE TABLE IF NOT EXISTS rtx_3000_gpu_prices (
+            date DATE PRIMARY KEY,
+            rtx_3050 VARCHAR NOT NULL,
+            rtx_3060 VARCHAR NOT NULL,
+            rtx_3060_ti VARCHAR NOT NULL,
+            rtx_3070 VARCHAR NOT NULL,
+            rtx_3070_ti VARCHAR NOT NULL,
+            rtx_3080 VARCHAR NOT NULL,
+            rtx_3080_ti VARCHAR NOT NULL,
+            rtx_3090 VARCHAR NOT NULL,
+            rtx_3090_ti VARCHAR NOT NULL);
+          """,
+    )
 
     @task
     def gpu_search(x: str):
         return ebay_extract_price.get_average(x)
 
     @task
-    def load(rtx_3000, rtx_2000):
-        print('RTX 3000 values: ', rtx_3000)
-        print('RTX 2000 values: ', rtx_2000)
+    def get_nvidia_statement(data):
+        values = list(data)
+        today = datetime.today().strftime('%Y-%m-%d')
 
-    rtx_3000 = gpu_search.expand(x=['RTX 3050', 'RTX 3060', 'RTX 3060 ti', 'RTX 3070', 'RTX 3070 Ti', 'RTX 3080', 'RTX 3080 Ti', 'RTX 3090', 'RTX 3090 Ti'])
-    rtx_2000 = gpu_search.expand(x=['RTX 2060', 'RTX 2060 Super', 'RTX 2070', 'RTX 2070 Super', 'RTX 2080', 'RTX 2080 Super', 'RTX 2080 Ti'])
+        values.insert(0, today)
 
-    load(rtx_3000, rtx_2000)
+        formatted_values = tuple(values)
+        query = f'INSERT INTO rtx_3000_gpu_prices VALUES {formatted_values}'
+
+        return query
+
+    @task
+    def load_to_postgres(query):
+        hook = PostgresHook(postgres_conn_id="postgres_default")
+        hook.run(query)
+
+
+    rtx_3000 = gpu_search.expand(x=['RTX 3050 gpu', 'RTX 3060 gpu', 'RTX 3060 ti gpu', 'RTX 3070 gpu', 'RTX 3070 Ti gpu', 'RTX 3080 gpu', 'RTX 3080 Ti gpu', 'RTX 3090 gpu', 'RTX 3090 Ti gpu'])
+    # rtx_2000 = gpu_search.expand(x=['RTX 2060', 'RTX 2060 Super', 'RTX 2070', 'RTX 2070 Super', 'RTX 2080', 'RTX 2080 Super', 'RTX 2080 Ti'])
+
+    data = get_nvidia_statement(rtx_3000)
+
+    check_table >> load_to_postgres(data)
+
+
