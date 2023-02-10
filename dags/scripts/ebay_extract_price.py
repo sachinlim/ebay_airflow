@@ -49,14 +49,6 @@ def get_data(soup):
     return trimmed_results_list, trim_percentage, trimming, original_results_length
 
 
-def calculate_range(result_list):
-    # Calculating the first and last values in the sorted list of results for the range
-    minimum_value = min(result_list)
-    maximum_value = max(result_list)
-
-    return minimum_value, maximum_value
-
-
 def get_average(search_term):
     formatted_search_term = format_search_term(search_term)
 
@@ -72,6 +64,3 @@ def get_average(search_term):
         trimmed_mean = statistics.mean(trimmed_result_list)
         # minimum_value, maximum_value = self.calculate_range(trimmed_result_list)
         return f'{trimmed_mean:.2f}'
-
-
-print(get_average('rtx 3070 ti gpu'))
