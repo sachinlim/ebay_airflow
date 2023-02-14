@@ -37,7 +37,7 @@ For used RTX 3000 GPUs, the prices have fallen below RRP as expected, and people
 
 ## Data Extraction 
 
-The first phase to extract data focuses on getting all of the price data on eBay. Using the [eBay Advanced Search](https://www.ebay.co.uk/sch/ebayadvsearch) (EAS) feature, it is possible to see sold listings and get an idea on the market value. The sold price is indicated in green, below, with the filters of these items being used and UK only. 
+The first phase to extract data focuses on getting all of the price data on eBay. Using the [eBay Advanced Search](https://www.ebay.co.uk/sch/ebayadvsearch) (EAS) feature, it is possible to see sold listings and get an idea on the market value. eBay indicates the sold prices in green, below, with the filters of these items being used and UK only. 
 
 ![image](https://user-images.githubusercontent.com/80691974/218758566-f85ac308-2fe8-433d-b7ac-f53c7db34fa5.png)
 
@@ -69,6 +69,10 @@ Now that the data is stored on Postgres, it is possible to see how the data has 
 
 ## Future (Data) Analysis
 
-Enough data is first needed because this pipeline collects data with a batch processing model, every day at midnight.
+Enough data is first needed because this pipeline collects data with a batch processing model, every day at midnight. As of February 14 2023, there are only 6 days worth of data, giving the following result on Google Looker Studio:
 
+![image](https://user-images.githubusercontent.com/80691974/218826603-91c33d95-eaff-4743-b9eb-d4dc92b841bc.png)
+Link: https://lookerstudio.google.com/reporting/47f510fa-6d05-4839-a984-9c3f9f790bab/page/tDaFD
+
+It is pretty much a flat line right now, as there is not a lot of price movements. However, looking back on a monthly/weekly scale with 12-24 months worth of data, it would paint a very interesting picture.
 
