@@ -62,7 +62,7 @@ Now that the price averages have been calculated, this average is saved on a Pos
 
 One thing to note about `datetime.now()` is that it is [generally advised](https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html#creating-a-task) to not use this, as when backtracking the DAGs for previous dates, it will output today's date and not for the instance of the DAG run. This is generally not something that is wanted, but as this project runs once and needs to gather the current day's (date's) averages, it is fine to use. The DAG for this project should never be run for previous dates using `catchup` because it is not possible to calculate price averages for yesterday's results - going back in time is impossible.
 
-![image](https://user-images.githubusercontent.com/80691974/218767385-58a103a6-52d3-45cd-8a02-e1ab1427b9f7.png)
+![image](https://user-images.githubusercontent.com/80691974/218828686-fc170604-2dee-46c8-8ab2-00c6bfa56d4f.png)
 
 Now that the data is stored on Postgres, it is possible to see how the data has been fluctuating over time. 
 
