@@ -43,7 +43,9 @@ The first phase to extract data focuses on getting all of the price data on eBay
 
 Using Beautiful Soup and providing the URL to the link obtained by the EAS, it is possible to change a few things from the URL to make sure that the same search filters are applied to all searches, and also to change the search to any item on eBay. For items with spaces, a `+` is used in place before it is added onto the URL - this process can be seen on [this line](https://github.com/sachinlim/ebay_airflow/blob/2527c700d015d3de1c0501e66952c0d43a9947dd/dags/scripts/ebay_extract_price.py#L8) of code.
 
-Once Beautiful Soup is on the correct webpage, it extracts all of the prices (green number in screenshot above) from the search and adds it onto a list, as the size of the list is mostly going to be up to 60 items because only the first page is extracted. Going beyond the first page would add in older sets of data, as the EAS shows sold listing from most recent to oldest, and may add in more outliers.
+Once Beautiful Soup is on the correct webpage, it extracts all of the prices (green number in screenshot above) from the search and adds it onto a list, as the size of the list is mostly going to be up to 60 items because only the first page is extracted. Going beyond the first page would add in older sets of data, as the EAS shows sold listing from most recent to oldest, and may add in more outliers. 
+
+It is also important to note that, if there are not a lot of GPUs being sold, there is less information available, meaning data is not going to show the full picture of the already tiny market. The EAS also seems to behave differently depending on the item being searched, and will not always follow the filters being applied.  
 
 The delivery cost is not factored in, as this can vary depending on what the courier charges, what the seller wants, or what the seller thinks it may cost. The Nvidia RRP also does not factor in delivery costs, so it is reasonable to exclude delivery costs for this instance. 
 
