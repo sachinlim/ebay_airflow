@@ -25,15 +25,15 @@ with DAG(
         sql="""
             CREATE TABLE IF NOT EXISTS rtx_3000_gpu_prices (
             date DATE PRIMARY KEY,
-            rtx_3050 VARCHAR NOT NULL,
-            rtx_3060 VARCHAR NOT NULL,
-            rtx_3060_ti VARCHAR NOT NULL,
-            rtx_3070 VARCHAR NOT NULL,
-            rtx_3070_ti VARCHAR NOT NULL,
-            rtx_3080 VARCHAR NOT NULL,
-            rtx_3080_ti VARCHAR NOT NULL,
-            rtx_3090 VARCHAR NOT NULL,
-            rtx_3090_ti VARCHAR NOT NULL);
+            rtx_3050 DECIMAL(6,2) NOT NULL,
+            rtx_3060 DECIMAL(6,2) NOT NULL,
+            rtx_3060_ti DECIMAL(6,2) NOT NULL,
+            rtx_3070 DECIMAL(6,2) NOT NULL,
+            rtx_3070_ti DECIMAL(6,2) NOT NULL,
+            rtx_3080 DECIMAL(6,2) NOT NULL,
+            rtx_3080_ti DECIMAL(6,2) NOT NULL,
+            rtx_3090 DECIMAL(6,2) NOT NULL,
+            rtx_3090_ti DECIMAL(6,2) NOT NULL);
           """,
     )
 
@@ -59,10 +59,18 @@ with DAG(
         hook.run(query)
 
 
-    rtx_3000 = gpu_search.expand(x=['RTX 3050 gpu', 'RTX 3060 gpu', 'RTX 3060 ti gpu', 'RTX 3070 gpu', 'RTX 3070 Ti gpu', 'RTX 3080 gpu', 'RTX 3080 Ti gpu', 'RTX 3090 gpu', 'RTX 3090 Ti gpu'])
+    rtx_3000 = gpu_search.expand(x=['RTX 3050 gpu',
+                                    'RTX 3060 gpu',
+                                    'RTX 3060 ti gpu',
+                                    'RTX 3070 gpu',
+                                    'RTX 3070 Ti gpu',
+                                    'RTX 3080 gpu',
+                                    'RTX 3080 Ti gpu',
+                                    'RTX 3090 gpu',
+                                    'RTX 3090 Ti gpu',
+                                    ])
 
     data = get_nvidia_statement(rtx_3000)
 
     check_table >> load_to_postgres(data)
-
 
