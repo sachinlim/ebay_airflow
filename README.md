@@ -20,13 +20,17 @@ Once enough data has been collected and stored, it can start to give a picture o
 
 ### AWS Implementation
 
-The entire process runs off AWS and uses AWS EC2 to host Airflow to run the pipeline, and AWS RDS to use the Postgres database. [This video](https://www.youtube.com/watch?v=o88LNQDH2uI) gives a tutorial on how to set up Airflow on an EC2 instance. It was previously possible to run Airflow on the t2.micro (free) instance, as there were a few articles online about it, but it does not seem to be the case anymore. The video tutorial recommends the use of the t2.small instance, but for this project, the Airflow webpage would crash, leading me to move over to t2.medium instance to run the pipeline. 
+The entire process runs off AWS and uses AWS EC2 to host Airflow to run the pipeline, and AWS RDS to use the Postgres database. [This video](https://www.youtube.com/watch?v=o88LNQDH2uI) gives a tutorial on how to set up Airflow on an EC2 instance. As the script for this project uses Beautiful Soup, that also needs to be installed with `pip install beautifulsoup4` before the webserver and scheduler has been started for Airflow. A [connection](https://airflow.apache.org/docs/apache-airflow/stable/howto/connection.html) to the Postgres database on AWS RDS also needs to be made.
 
-This process of hosting the entire process on the cloud was a great way to learn about AWS and see its capabilities. The pipeline and the ETL process is hosted on a single EC2 instance, and for the future, it would be better to host the scripts to other instances/containers to reduce the workload on the Airflow EC2 instance. 
+It was previously possible to run Airflow on the t2.micro (free) instance, as there were a few articles online about it, but it does not seem to be the case anymore. The video tutorial recommends the use of the t2.small instance, but for this project, the Airflow webpage would crash, leading me to move over to t2.medium instance to run the pipeline. 
+
+This process of hosting the entire process on the cloud was a great way to learn about AWS and see its capabilities. The pipeline and the ETL process is hosted on a single EC2 instance, and for the future, it would be better to host the scripts to other instances/containers to reduce the workload on the Airflow EC2 instance - utilising it as an orchastrator. 
+
+On March 1 2023, the cost for running the entire service was $24.24 (USD), converting to £20.16 with a fee free Mastercard.
 
 ### Nvidia Graphics Cards on eBay
 
-Nvidia and AMD (more recently Intel) GPUs have been sold on eBay for a very long time. During the COVID-19 pandemic, GPUs were being resold at inflated prices due to supply shortages and the crypto mining boom. For example, the RTX 3080 Founders Edition was sold for £649 (RRP) on [Scan](https://www.scan.co.uk) (Nvidia partner) and could be found selling on eBay at £1000+, some were selling beyond £1500 as well. Both new and used GPUs were affected by the price inflation. 
+Nvidia GPUs work on a tier based system, as the higher the number, the more performance it offers while costing more. Nvidia and AMD (more recently Intel) GPUs have been sold on eBay for a very long time. During the COVID-19 pandemic, GPUs were being resold at inflated prices due to supply shortages and the crypto mining boom. For example, the RTX 3080 Founders Edition was sold for £649 (RRP) on [Scan](https://www.scan.co.uk) (Nvidia partner) and could be found selling on eBay at £1000+, some were selling beyond £1500 as well. Both new and used GPUs were affected by the price inflation. 
 
 Now, over the past year, GPU prices have fallen, and newer RTX 4000 GPUs are very high in RRP. There have been [videos](https://www.youtube.com/watch?v=9kiOLC2Ca_I) talking about best value GPUs over the past few years, and now, Nvidia GPUs offer better price to performance ratios than before, and the AMD lineups offering even better value. 
 
@@ -69,12 +73,18 @@ One thing to note about `datetime.now()` is that it is [generally advised](https
 Now that the data is stored on Postgres, it is possible to see how the data has been fluctuating over time. 
 
 
-## Future (Data) Analysis
+## Data Analysis
 
-Enough data is first needed because this pipeline collects data with a batch processing model, every day at midnight. As of February 14 2023, there are only 6 days worth of data, giving the following result on Google Looker Studio:
+Enough data is first needed to get better insights. This pipeline collects data with a batch processing model, every day at midnight. The link to the presentation: https://lookerstudio.google.com/reporting/47f510fa-6d05-4839-a984-9c3f9f790bab/page/tDaFD
+
+On February 14 2023, there were 6 days worth of data, giving the following result on Google Looker Studio:
 
 ![image](https://user-images.githubusercontent.com/80691974/218826603-91c33d95-eaff-4743-b9eb-d4dc92b841bc.png)
-Link: https://lookerstudio.google.com/reporting/47f510fa-6d05-4839-a984-9c3f9f790bab/page/tDaFD
-
 It is pretty much a flat line right now, as there is not a lot of price movements. However, looking back on a monthly/weekly scale with 12-24 months worth of data, it would paint a very interesting picture.
 
+As of March 1 2023, there are 21 days worth of data, giving the following result on Google Looker Studio:
+
+![image](https://user-images.githubusercontent.com/80691974/222117957-5f42e12b-4564-42f7-95f7-8a2a3b519132.png)
+Now, there is a slightly better view of the price movements for RTX 3000 GPUs. The RTX 3080 Ti and RTX 3090 prices are clashing with one another, and the RTX 3090's retail price at launch was £1,399 because it was the top-of-the-line offering. The prices dropped below the price of the lesser RTX 3080 Ti likely due to crypto miners selling off their hardware for cheaper. 
+
+One thing to note is the price of the RTX 3050 - it is going wild because of the lack of sales and the way the EAS works, giving incorrect results for certain searches. Being able to detect this would be the next phase of the project.
