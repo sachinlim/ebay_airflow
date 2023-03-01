@@ -24,7 +24,7 @@ The entire process runs off AWS and uses AWS EC2 to host Airflow to run the pipe
 
 It was previously possible to run Airflow on the t2.micro (free) instance, as there were a few articles online about it, but it does not seem to be the case anymore. The video tutorial recommends the use of the t2.small instance, but for this project, the Airflow webpage would crash, leading me to move over to t2.medium instance to run the pipeline. 
 
-This process of hosting the entire process on the cloud was a great way to learn about AWS and see its capabilities. The pipeline and the ETL process is hosted on a single EC2 instance, and for the future, it would be better to host the scripts to other instances/containers to reduce the workload on the Airflow EC2 instance - utilising it as an orchastrator. 
+This process of hosting the entire process on the cloud was a great way to learn about AWS and see its capabilities. The pipeline and the ETL process is hosted on a single EC2 instance, and for the future, it would be better to host the scripts to other instances/containers to reduce the workload on the Airflow EC2 instance - utilising it as an orchestrator. 
 
 On March 1 2023, the cost for running the entire service was $24.24 (USD), converting to £20.16 with a fee free Mastercard.
 
@@ -80,7 +80,7 @@ Enough data is first needed to get better insights. This pipeline collects data 
 On February 14 2023, there were 6 days worth of data, giving the following result on Google Looker Studio:
 
 ![image](https://user-images.githubusercontent.com/80691974/218826603-91c33d95-eaff-4743-b9eb-d4dc92b841bc.png)
-It is pretty much a flat line right now, as there is not a lot of price movements. However, looking back on a monthly/weekly scale with 12-24 months worth of data, it would paint a very interesting picture.
+It is pretty much a flat line right now, as there are not a lot of price movements. However, looking back on a monthly/weekly scale with 12-24 months worth of data, it would paint a very interesting picture.
 
 As of March 1 2023, there are 21 days worth of data, giving the following result on Google Looker Studio:
 
