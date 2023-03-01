@@ -6,6 +6,7 @@ import statistics
 def format_search_term(link):
     """
     Formatting the search term so that it can be added onto the URL link
+
     :param link: search term with spaces separating words
     :return: search term with + instead of spaces
     """
@@ -18,6 +19,7 @@ def website_data(search):
     """
     Adding the formatted search to the URL link so that BS4 knows where to look
     URL contains search filters: "Exact words, any order", Used, Sold listings, and UK only
+
     :param search: formatted search term
     :return: data obtained from the search
     """
@@ -34,6 +36,7 @@ def website_data(search):
 def get_data(soup):
     """
     Formatting the data obtained so that it contains only the data needed for mathematical analysis
+
     :param soup: data obtained with website_data()
     :return: array with data trimmed and the data associated with trimming
     """
@@ -66,6 +69,7 @@ def get_data(soup):
 def get_average(search_term):
     """
     Calculating the average if there is data for the search term
+
     :param search_term: item name
     :return: trimmed mean with the results obtained from the search
     """
