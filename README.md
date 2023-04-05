@@ -47,7 +47,7 @@ The first phase to extract data focuses on getting all of the price data on eBay
 
 Using Beautiful Soup and providing the URL to the link obtained by the EAS, it is possible to change a few things from the URL to make sure that the same search filters are applied to all searches, and also to change the search to any item on eBay. For items with spaces, a `+` is used in place before it is added onto the URL - this process can be seen on [this line](https://github.com/sachinlim/ebay_airflow/blob/2527c700d015d3de1c0501e66952c0d43a9947dd/dags/scripts/ebay_extract_price.py#L8) of code.
 
-Once Beautiful Soup is on the correct webpage, it extracts all of the prices (green number in screenshot above) from the search and adds it onto a list, as the size of the list is mostly going to be up to 60 items because only the first page is extracted. Going beyond the first page would add in older sets of data, as the EAS shows sold listing from most recent to oldest, and may add in more outliers. 
+Once Beautiful Soup is on the correct webpage, it extracts all of the prices (green number in screenshot above) from the search and adds it onto a list, as the size of the list is mostly going to be up to 60 items because only the first page is extracted. Going beyond the first page would add in older sets of data, as the EAS shows sold listings from most recent to oldest, and may add in more outliers. 
 
 It is also important to note that, if there are not a lot of GPUs being sold, there is less information available, meaning data is not going to show the full picture of the already tiny market. The EAS also seems to behave differently depending on the item being searched, and will not always follow the filters being applied.  
 
@@ -75,7 +75,7 @@ Now that the data is stored on Postgres, it is possible to see how the data has 
 
 ## Data Analysis
 
-Enough data is first needed to get better insights. This pipeline collects data with a batch processing model, every day at midnight. The link to the presentation: https://lookerstudio.google.com/reporting/47f510fa-6d05-4839-a984-9c3f9f790bab/page/tDaFD
+This pipeline collects data with a batch processing model, every day at midnight. The link to the presentation: https://lookerstudio.google.com/reporting/47f510fa-6d05-4839-a984-9c3f9f790bab/page/tDaFD
 
 On February 14 2023, there were 6 days worth of data, giving the following result on Google Looker Studio:
 
@@ -88,3 +88,12 @@ As of March 1 2023, there are 21 days worth of data, giving the following result
 Now, there is a slightly better view of the price movements for RTX 3000 GPUs. The RTX 3080 Ti and RTX 3090 prices are clashing with one another, and the RTX 3090's retail price at launch was £1,399 because it was the top-of-the-line offering. The prices dropped below the price of the lesser RTX 3080 Ti likely due to crypto miners selling off their hardware for cheaper. 
 
 One thing to note is the price of the RTX 3050 - it is going wild because of the lack of sales and the way the EAS works, giving incorrect results for certain searches. Being able to detect this would be the next phase of the project.
+
+***
+
+
+Finally, at the end of March 31 2023, the project was *stopped*. While this project could have kept going, AWS EC2 costs were very high for what it was doing. It could be moved onto another platform, possibly AWS Lambda to run the Python script, but that is another project in itself. Overall, the price for this project was about £50 to host the EC2 instance and AWS RDS backups - a great way to learn more about Airflow, ETL, the cloud, and about infrastructure costs. 
+
+![image](https://user-images.githubusercontent.com/80691974/230161106-159f5e4c-39f8-4fc4-b149-06d95a94ee68.png)
+
+The data that was originally in AWS RDS (Postgres) was exported to CSV before being uploaded onto Looker Studio, hence the missing £ symbol in the data. Had the project continued for longer, this project would have provided insightful information for the online PC gaming community. 
